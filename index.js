@@ -31,6 +31,7 @@ async function run() {
     await client.connect();
 
     const coffeesCollection=client.db("coffeeDB").collection("coffees");
+    const userCollection=client.db("coffeeDB").collection('users')
 
     app.get("/coffees",async(req,res)=>{
       const cursor=coffeesCollection.find();
@@ -75,7 +76,21 @@ async function run() {
 
 
 
+        // user related apis
+        // add user
+        app.post("/users",async(req,res)=>{
+          const userProfile=req.body;
+          console.log(userProfile);
+          const result=await userCollection.insertOne(userProfile);
+          res.send(result);
+        })
 
+        // find user
+        app.get("/users",async(req,res)=>{
+          const result=await userCollection.find().toArray();
+          res.send(result)
+        })
+        
 
 
 
